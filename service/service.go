@@ -60,8 +60,20 @@ func (app *App) setRouters() {
 	app.Get("/companies", corsHandler(app.handleRequest(handler.GetCompanies)))
 	app.Get("/companies/{companyID}", corsHandler(app.handleRequest(handler.GetCompany)))
 	app.Post("/companies", corsHandler(app.handleRequest(handler.CreateCompany)))
-	app.Post("/companies/{companyID}/delete", corsHandler(app.handleRequest(handler.DeleteCompany)))
 	app.Post("/companies/{companyID}", corsHandler(app.handleRequest(handler.UpdateCompany)))
+	app.Post("/companies/{companyID}/delete", corsHandler(app.handleRequest(handler.DeleteCompany)))
+
+	//Domains
+	app.Get("/companies/{companyID}/domains", corsHandler(app.handleRequest(handler.GetDomainsForCompany)))
+	app.Get("/companies/{companyID}/domains/{domainID}", corsHandler(app.handleRequest(handler.GetDomainForCompany)))
+	app.Post("/companies/{companyID}/domains", corsHandler(app.handleRequest(handler.CreateDomainForCompany)))
+	app.Post("/companies/{companyID}/domains/{domainID}", corsHandler(app.handleRequest(handler.UpdateDomainForCompany)))
+	app.Post("/companies/{companyID}/domains/{domainID}/delete", corsHandler(app.handleRequest(handler.DeleteDomainForCompany)))
+	app.Get("/domains", corsHandler(app.handleRequest(handler.GetDomains)))
+	app.Get("/domains/{domainID}", corsHandler(app.handleRequest(handler.GetDomain)))
+	app.Post("/domains", corsHandler(app.handleRequest(handler.CreateDomain)))
+	app.Post("/domains/{domainID}", corsHandler(app.handleRequest(handler.UpdateDomain)))
+	app.Post("/domains/{domainID}/delete", corsHandler(app.handleRequest(handler.DeleteDomain)))
 
 	//Dummy Login
 	app.Post("/login", corsHandler(app.handleRequest(handler.DummyLogin)))

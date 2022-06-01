@@ -13,6 +13,7 @@ type Company struct {
 
 type Domain struct {
 	mgm.DefaultModel `bson:",inline"`
+	CompanyID        string      `json:"company_id"`
 	DomainName       string      `json:"domain_name"`
 	Subdomains       []Subdomain `json:"subdomains"`
 }

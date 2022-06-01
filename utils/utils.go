@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"activeReconBot/models"
 	"github.com/dgrijalva/jwt-go"
 	"log"
 	"time"
@@ -94,4 +95,8 @@ func GetUsernameFromToken(jwtToken string) string {
 
 func ShodanRecon() {
 	//TODO: This will fill the primary ports and technologies with their cve's
+}
+
+func RemoveFromDomainSlice(slice []models.Domain, idx int) []models.Domain {
+	return append(slice[:idx], slice[idx+1:]...)
 }
