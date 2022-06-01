@@ -91,3 +91,7 @@ func GetUsernameFromToken(jwtToken string) string {
 		return ""
 	}
 }
+
+func ShodanRecon() {
+	//TODO: This will fill the primary ports and technologies with their cve's
+}

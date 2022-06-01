@@ -9,3 +9,9 @@ Asset management and simple active recon for bounty hunters, security teams, etc
 * MongoDB
 
 ---
+
+# TODO
+
+* Test integration with submonitor for autofilling company subdomains discovering and autoscanning
+
+---
