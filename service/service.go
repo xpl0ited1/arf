@@ -2,6 +2,7 @@ package service
 
 import (
 	"activeReconBot/service/config"
+	"activeReconBot/service/handler"
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/kamva/mgm/v3"
@@ -53,10 +54,14 @@ func corsHandler(h http.Handler) http.HandlerFunc {
 }
 
 // setRouters sets the all required routers
-func (a *App) setRouters() {
+func (app *App) setRouters() {
 
-	//search test
-	//a.Get("/test", corsHandler(a.handleRequest(handler.Test)))
+	//Companies
+	app.Get("/companies", corsHandler(app.handleRequest(handler.GetCompanies)))
+	app.Get("/companies/{companyID}", corsHandler(app.handleRequest(handler.GetCompany)))
+	app.Post("/companies", corsHandler(app.handleRequest(handler.CreateCompany)))
+	app.Delete("/companies/{companyID}", corsHandler(app.handleRequest(handler.DeleteCompany)))
+	app.Put("/companies/{companyID}", corsHandler(app.handleRequest(handler.UpdateCompany)))
 
 }
 
