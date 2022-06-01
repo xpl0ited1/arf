@@ -60,8 +60,11 @@ func (app *App) setRouters() {
 	app.Get("/companies", corsHandler(app.handleRequest(handler.GetCompanies)))
 	app.Get("/companies/{companyID}", corsHandler(app.handleRequest(handler.GetCompany)))
 	app.Post("/companies", corsHandler(app.handleRequest(handler.CreateCompany)))
-	app.Delete("/companies/{companyID}", corsHandler(app.handleRequest(handler.DeleteCompany)))
-	app.Put("/companies/{companyID}", corsHandler(app.handleRequest(handler.UpdateCompany)))
+	app.Post("/companies/{companyID}/delete", corsHandler(app.handleRequest(handler.DeleteCompany)))
+	app.Post("/companies/{companyID}", corsHandler(app.handleRequest(handler.UpdateCompany)))
+
+	//Dummy Login
+	app.Post("/login", corsHandler(app.handleRequest(handler.DummyLogin)))
 
 }
 
