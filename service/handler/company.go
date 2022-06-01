@@ -17,7 +17,7 @@ func CreateCompany(w http.ResponseWriter, r *http.Request) {
 
 func UpdateCompany(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	companyID := vars["company_id"]
+	companyID := vars["companyID"]
 	result, err := dao.UpdateCompany(companyID, r)
 	if err != nil {
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
@@ -28,7 +28,7 @@ func UpdateCompany(w http.ResponseWriter, r *http.Request) {
 
 func DeleteCompany(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	companyID := vars["company_id"]
+	companyID := vars["companyID"]
 	result, err := dao.DeleteCompany(companyID)
 	if err != nil {
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
@@ -48,7 +48,7 @@ func GetCompanies(w http.ResponseWriter, r *http.Request) {
 
 func GetCompany(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	companyID := vars["company_id"]
+	companyID := vars["companyID"]
 	result, err := dao.GetCompany(companyID)
 	if err != nil {
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
