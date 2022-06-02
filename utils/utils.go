@@ -100,3 +100,7 @@ func ShodanRecon() {
 func RemoveFromDomainSlice(slice []models.Domain, idx int) []models.Domain {
 	return append(slice[:idx], slice[idx+1:]...)
 }
+
+func RemoveFromSubDomainSlice(slice []models.Subdomain, idx int) []models.Subdomain {
+	return append(slice[:idx], slice[idx+1:]...)
+}

@@ -20,6 +20,7 @@ type Domain struct {
 
 type Subdomain struct {
 	mgm.DefaultModel `bson:",inline"`
+	DomainID         string            `json:"domain_id"`
 	SubdomainName    string            `json:"subdomain_name"`
 	Ports            []TcpPort         `json:"ports"`
 	PortScans        []PortScan        `json:"port_scans"`

@@ -75,6 +75,18 @@ func (app *App) setRouters() {
 	app.Post("/domains/{domainID}", corsHandler(app.handleRequest(handler.UpdateDomain)))
 	app.Post("/domains/{domainID}/delete", corsHandler(app.handleRequest(handler.DeleteDomain)))
 
+	//Subdomains
+	app.Get("/domains/{domainID}/subdomains", corsHandler(app.handleRequest(handler.GetSubdomainsForDomain)))
+	app.Get("/domains/{domainID}/subdomains/{subdomainID}", corsHandler(app.handleRequest(handler.GetSubdomainForDomain)))
+	app.Post("/domains/{domainID}/subdomains", corsHandler(app.handleRequest(handler.CreateSubdomainForDomain)))
+	app.Post("/domains/{domainID}/subdomains/{subdomainID}", corsHandler(app.handleRequest(handler.UpdateSubdomainForDomain)))
+	app.Post("/domains/{domainID}/subdomains/{subdomainID}/delete", corsHandler(app.handleRequest(handler.DeleteSubdomainForDomain)))
+	app.Get("/subdomains", corsHandler(app.handleRequest(handler.GetSubdomains)))
+	app.Get("/subdomains/{subdomainID}", corsHandler(app.handleRequest(handler.GetSubdomain)))
+	app.Post("/subdomains", corsHandler(app.handleRequest(handler.CreateSubdomain)))
+	app.Post("/subdomains/{subdomainID}", corsHandler(app.handleRequest(handler.UpdateSubdomain)))
+	app.Post("/subdomains/{subdomainID}/delete", corsHandler(app.handleRequest(handler.DeleteSubdomain)))
+
 	//Dummy Login
 	app.Post("/login", corsHandler(app.handleRequest(handler.DummyLogin)))
 
