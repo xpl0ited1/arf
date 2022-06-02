@@ -89,7 +89,7 @@ func GetSubdomainsForDomain(w http.ResponseWriter, r *http.Request) {
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	RespondJSON(w, http.StatusCreated, result)
+	RespondJSON(w, http.StatusOK, result)
 }
 
 func UpdateSubdomainForDomain(w http.ResponseWriter, r *http.Request) {

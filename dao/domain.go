@@ -19,7 +19,7 @@ func GetDomainsForCompany(companyID string) ([]models.Domain, error) {
 		return nil, err
 	}
 
-	err = mgm.Coll(&models.Domain{}).SimpleFind(&result, bson.M{"company_id": companyID})
+	err = mgm.Coll(&models.Domain{}).SimpleFind(&result, bson.M{"companyid": companyID})
 	if err != nil {
 		//TODO
 		return nil, err

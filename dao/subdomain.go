@@ -19,7 +19,7 @@ func GetSubdomainsForDomain(domainID string) ([]models.Subdomain, error) {
 		return nil, err
 	}
 
-	err = mgm.Coll(&models.Subdomain{}).SimpleFind(&result, bson.M{"domain_id": domainID})
+	err = mgm.Coll(&models.Subdomain{}).SimpleFind(&result, bson.M{"domainid": domainID})
 	if err != nil {
 		//TODO
 		return nil, err
@@ -83,7 +83,7 @@ func CreateSubdomainForDomain(r *http.Request, domainID string) (models.Subdomai
 		return subdomain, err
 	}
 
-	err = mgm.Coll(&domain).Create(&domain)
+	err = mgm.Coll(&subdomain).Create(&subdomain)
 	if err != nil {
 		//TODO
 		return subdomain, err
