@@ -104,3 +104,18 @@ func RemoveFromDomainSlice(slice []models.Domain, idx int) []models.Domain {
 func RemoveFromSubDomainSlice(slice []models.Subdomain, idx int) []models.Subdomain {
 	return append(slice[:idx], slice[idx+1:]...)
 }
+
+func ChunkSlice(slice []string, chunkSize int) [][]string {
+	var chunks [][]string
+	for i := 0; i < len(slice); i += chunkSize {
+		end := i + chunkSize
+
+		if end > len(slice) {
+			end = len(slice)
+		}
+
+		chunks = append(chunks, slice[i:end])
+	}
+
+	return chunks
+}

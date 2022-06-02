@@ -24,6 +24,7 @@ func RespondError(w http.ResponseWriter, code int, message string) {
 	RespondJSON(w, code, map[string]string{"error": message})
 }
 
-func Test(w http.ResponseWriter, r *http.Request) {
-	RespondJSON(w, http.StatusOK, "Testing Api")
+func SendUnauth(w http.ResponseWriter, r *http.Request) {
+	RespondError(w, http.StatusUnauthorized, "Unauthorized")
+	return
 }

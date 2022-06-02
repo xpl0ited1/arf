@@ -2,11 +2,18 @@ package handler
 
 import (
 	"activeReconBot/dao"
+	"activeReconBot/utils"
 	"github.com/gorilla/mux"
 	"net/http"
 )
 
 func CreateCompany(w http.ResponseWriter, r *http.Request) {
+	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
+	if err != nil {
+		RespondError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
 	result, err := dao.CreateCompany(r)
 	if err != nil {
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
@@ -16,6 +23,12 @@ func CreateCompany(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateCompany(w http.ResponseWriter, r *http.Request) {
+	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
+	if err != nil {
+		RespondError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
 	vars := mux.Vars(r)
 	companyID := vars["companyID"]
 	result, err := dao.UpdateCompany(companyID, r)
@@ -27,6 +40,12 @@ func UpdateCompany(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteCompany(w http.ResponseWriter, r *http.Request) {
+	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
+	if err != nil {
+		RespondError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
 	vars := mux.Vars(r)
 	companyID := vars["companyID"]
 	result, err := dao.DeleteCompany(companyID)
@@ -38,6 +57,12 @@ func DeleteCompany(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetCompanies(w http.ResponseWriter, r *http.Request) {
+	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
+	if err != nil {
+		RespondError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
 	result, err := dao.GetCompanies()
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
@@ -47,6 +72,12 @@ func GetCompanies(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetCompany(w http.ResponseWriter, r *http.Request) {
+	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
+	if err != nil {
+		RespondError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
 	vars := mux.Vars(r)
 	companyID := vars["companyID"]
 	result, err := dao.GetCompany(companyID)

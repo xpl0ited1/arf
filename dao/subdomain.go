@@ -2,6 +2,7 @@ package dao
 
 import (
 	"activeReconBot/models"
+	"activeReconBot/scanners"
 	"activeReconBot/utils"
 	"encoding/json"
 	"github.com/kamva/mgm/v3"
@@ -206,6 +207,68 @@ func UpdateSubdomain(subdomainID string, r *http.Request) (models.Subdomain, err
 
 	result.CreatedAt = createdAt
 	result.UpdatedAt = time.Now()
+
+	err = mgm.Coll(&models.Subdomain{}).Update(&result)
+	if err != nil {
+		//TODO
+		return result, err
+	}
+
+	//Update domain in the company array
+	if result.DomainID != "" {
+		domain, err := GetDomain(result.DomainID)
+		if err != nil {
+			//TODO
+			return result, err
+		}
+		var subdomains []models.Subdomain
+		exists := false
+		for _, subdomain := range domain.Subdomains {
+			if subdomain.ID.Hex() == result.ID.Hex() {
+				subdomain = result
+				exists = true
+			}
+			subdomains = append(subdomains, subdomain)
+		}
+
+		if !exists {
+			subdomains = append(subdomains, result)
+		}
+		domain.Subdomains = subdomains
+		err = mgm.Coll(&models.Domain{}).Update(&domain)
+		if err != nil {
+			//TODO
+			return result, err
+		}
+	}
+
+	return result, nil
+}
+
+func UpdateSubdomainNoReq(subdomainID string, shodanResult scanners.ShodanHostResult) (models.Subdomain, error) {
+	var result = models.Subdomain{}
+
+	err := mgm.Coll(&models.Subdomain{}).FindByID(subdomainID, &result)
+	if err != nil {
+		//TODO
+		return result, err
+	}
+	createdAt := result.CreatedAt
+	result.CreatedAt = createdAt
+	result.UpdatedAt = time.Now()
+	for _, data := range shodanResult.Data {
+		var tcpPort models.TcpPort
+		tcpPort.PortNumber = data.Port
+		tcpPort.Content = data.Data
+		tcpPort.ServiceName = data.Product
+		result.Ports = append(result.Ports, tcpPort)
+
+		if data.HTTP.Status != 0 {
+			var httpData models.HTTPDetectedURL
+			httpData.Title = data.HTTP.Title
+			result.HTTPDetectedURLs = append(result.HTTPDetectedURLs, httpData)
+		}
+	}
 
 	err = mgm.Coll(&models.Subdomain{}).Update(&result)
 	if err != nil {

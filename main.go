@@ -16,6 +16,8 @@ func main() {
 	port := flag.Int("p", 3100, "Set the listening port")
 	ip := flag.String("b", "0.0.0.0", "Set the listening ip address")
 
+	flag.Parse()
+
 	config := serviceConfig.GetConfig()
 
 	app := &service.App{}

@@ -48,17 +48,15 @@ type DirScanPath struct {
 }
 
 type TcpPort struct {
-	mgm.DefaultModel `bson:",inline"`
-	PortNumber       int32  `json:"port_number"`
-	ServiceName      string `json:"service_name"`
-	Content          string `json:"content"`
+	PortNumber  int32  `json:"port_number"`
+	ServiceName string `json:"service_name"`
+	Content     string `json:"content"`
 }
 
 type Technology struct {
-	mgm.DefaultModel `bson:",inline"`
-	TechnologyName   string          `json:"technology_name"`
-	Version          string          `json:"version"`
-	PublicExploits   []PublicExploit `json:"public_exploits"`
+	TechnologyName string          `json:"technology_name"`
+	Version        string          `json:"version"`
+	PublicExploits []PublicExploit `json:"public_exploits"`
 }
 
 type PublicExploit struct {
@@ -76,4 +74,15 @@ type HTTPDetectedURL struct {
 	URL              string `json:"url"`
 	Title            string `json:"title"`
 	//TODO: Screenshot
+}
+
+type User struct {
+	mgm.DefaultModel `bson:",inline"`
+	Username         string `json:"username"`
+	Password         string `json:"password"`
+}
+
+type ApiKey struct {
+	mgm.DefaultModel `bson:",inline"`
+	ApiKey           string `json:"api_key"`
 }
