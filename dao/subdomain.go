@@ -307,6 +307,25 @@ func UpdateSubdomainNoReq(subdomainID string, shodanResult scanners.ShodanHostRe
 	return result, nil
 }
 
+func UpdateSubdomainHTTPTitle(subdomain models.Subdomain) (models.Subdomain, error) {
+	var result = models.Subdomain{}
+
+	err := mgm.Coll(&models.Subdomain{}).FindByID(subdomain.ID.Hex(), &result)
+	if err != nil {
+		//TODO
+		return result, err
+	}
+	result.HTTPTitle = subdomain.HTTPTitle
+
+	err = mgm.Coll(&models.Subdomain{}).Update(&result)
+	if err != nil {
+		//TODO
+		return result, err
+	}
+
+	return result, nil
+}
+
 func DeleteSubdomainForDomain(domainID, subdomainID string) (map[string]bool, error) {
 	var resp = map[string]bool{}
 	domain, err := GetDomain(domainID)

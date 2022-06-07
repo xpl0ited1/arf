@@ -28,6 +28,7 @@ type Subdomain struct {
 	Technologies     []Technology      `json:"technologies"`
 	HTTPDetectedURLs []HTTPDetectedURL `json:"http_detected_urls"` //HTTPX
 	WaybackUris      []WaybackUrl      `json:"wayback_uris"`
+	HTTPTitle        string            `json:"http_title"`
 }
 
 type PortScan struct {

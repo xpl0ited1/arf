@@ -5,6 +5,7 @@ import (
 	"activeReconBot/scanners"
 	"activeReconBot/utils"
 	"github.com/gorilla/mux"
+	"log"
 	"net/http"
 	"sync"
 )
@@ -95,7 +96,7 @@ func CreateSubdomainForDomain(w http.ResponseWriter, r *http.Request) {
 	apiKey := r.Header.Get("X-Api-Key")
 	if apiKey != "" {
 		//TODO Implement API KEYS
-		if apiKey != "255a29906ead3a270fbb9da5b5fcdf58" {
+		if apiKey != "" {
 			RespondError(w, http.StatusUnauthorized, "Unauthorized")
 			return
 		}
@@ -119,12 +120,26 @@ func CreateSubdomainForDomain(w http.ResponseWriter, r *http.Request) {
 
 	wg.Add(1)
 	go func(wg *sync.WaitGroup) {
+		defer wg.Done()
 		ips := scanners.ResolveIpFromHostnameShodan(result.SubdomainName)
 		for _, ip := range ips {
 			shodanData := scanners.GetShodanDetailsFromIPAddress(ip.IP)
 			dao.UpdateSubdomainNoReq(result.ID.Hex(), shodanData)
 		}
-		defer wg.Done()
+
+		pageTitle, err := scanners.GetPageTitle(result.SubdomainName)
+		if err != nil {
+			log.Println(err)
+		}
+
+		if pageTitle != "" {
+			result.HTTPTitle = pageTitle
+			result, err = dao.UpdateSubdomainHTTPTitle(result)
+			if err != nil {
+				log.Println(err)
+			}
+		}
+
 	}(&wg)
 
 	RespondJSON(w, http.StatusCreated, result)
