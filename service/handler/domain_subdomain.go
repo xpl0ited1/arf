@@ -95,8 +95,18 @@ func DeleteSubdomain(w http.ResponseWriter, r *http.Request) {
 func CreateSubdomainForDomain(w http.ResponseWriter, r *http.Request) {
 	apiKey := r.Header.Get("X-Api-Key")
 	if apiKey != "" {
-		//TODO Implement API KEYS
-		if apiKey != "" {
+		res, err := dao.GetApiKeyByKey(apiKey)
+		if err != nil {
+			RespondError(w, http.StatusUnauthorized, "Unauthorized")
+			return
+		}
+
+		if !res.Enabled {
+			RespondError(w, http.StatusUnauthorized, "Unauthorized")
+			return
+		}
+
+		if res.ApiKey != "" {
 			RespondError(w, http.StatusUnauthorized, "Unauthorized")
 			return
 		}
