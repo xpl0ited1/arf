@@ -51,10 +51,10 @@ func GetDomainForCompany(w http.ResponseWriter, r *http.Request) {
 	domainID := vars["domainID"]
 	result, err := dao.GetDomainForCompany(companyID, domainID)
 	if err != nil {
-		RespondError(w, http.StatusUnprocessableEntity, err.Error())
+		RespondError(w, http.StatusNotFound, err.Error())
 		return
 	}
-	RespondJSON(w, http.StatusCreated, result)
+	RespondJSON(w, http.StatusOK, result)
 }
 
 func GetDomains(w http.ResponseWriter, r *http.Request) {
@@ -75,7 +75,7 @@ func GetDomains(w http.ResponseWriter, r *http.Request) {
 
 	result, err := dao.GetDomains()
 	if err != nil {
-		RespondError(w, http.StatusUnprocessableEntity, err.Error())
+		RespondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 	RespondJSON(w, http.StatusOK, result)
@@ -92,10 +92,10 @@ func GetDomain(w http.ResponseWriter, r *http.Request) {
 	domainID := vars["domainID"]
 	result, err := dao.GetDomain(domainID)
 	if err != nil {
-		RespondError(w, http.StatusUnprocessableEntity, err.Error())
+		RespondError(w, http.StatusNotFound, err.Error())
 		return
 	}
-	RespondJSON(w, http.StatusCreated, result)
+	RespondJSON(w, http.StatusOK, result)
 }
 
 func GetDomainsForCompany(w http.ResponseWriter, r *http.Request) {
@@ -109,10 +109,10 @@ func GetDomainsForCompany(w http.ResponseWriter, r *http.Request) {
 	companyID := vars["companyID"]
 	result, err := dao.GetDomainsForCompany(companyID)
 	if err != nil {
-		RespondError(w, http.StatusUnprocessableEntity, err.Error())
+		RespondError(w, http.StatusNotFound, err.Error())
 		return
 	}
-	RespondJSON(w, http.StatusCreated, result)
+	RespondJSON(w, http.StatusOK, result)
 }
 
 func UpdateDomainForCompany(w http.ResponseWriter, r *http.Request) {
@@ -130,7 +130,7 @@ func UpdateDomainForCompany(w http.ResponseWriter, r *http.Request) {
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	RespondJSON(w, http.StatusCreated, result)
+	RespondJSON(w, http.StatusOK, result)
 }
 
 func UpdateDomain(w http.ResponseWriter, r *http.Request) {
@@ -147,7 +147,7 @@ func UpdateDomain(w http.ResponseWriter, r *http.Request) {
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	RespondJSON(w, http.StatusCreated, result)
+	RespondJSON(w, http.StatusOK, result)
 }
 
 func DeleteDomain(w http.ResponseWriter, r *http.Request) {
@@ -165,7 +165,7 @@ func DeleteDomain(w http.ResponseWriter, r *http.Request) {
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	RespondJSON(w, http.StatusCreated, result)
+	RespondJSON(w, http.StatusOK, result)
 }
 
 func DeleteDomainForCompany(w http.ResponseWriter, r *http.Request) {
@@ -184,5 +184,5 @@ func DeleteDomainForCompany(w http.ResponseWriter, r *http.Request) {
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	RespondJSON(w, http.StatusCreated, result)
+	RespondJSON(w, http.StatusOK, result)
 }

@@ -16,7 +16,7 @@ func DummyLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var response = map[string]string{}
-	if user.Username == "ACAB" && user.Password == "473f5985cea3ac848546e9ef178e9ae1018b4bef57bdc6be408609a4532cb179" {
+	if user.Username == "ACAB" && user.Password == "" {
 		token, err := utils.CreateTokenForUser(user.Username, user.Username)
 		if err != nil {
 			RespondError(w, http.StatusInternalServerError, err.Error())

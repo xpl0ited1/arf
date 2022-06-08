@@ -87,6 +87,13 @@ func (app *App) setRouters() {
 	app.Post("/subdomains/{subdomainID}", corsHandler(app.handleRequest(handler.UpdateSubdomain)))
 	app.Post("/subdomains/{subdomainID}/delete", corsHandler(app.handleRequest(handler.DeleteSubdomain)))
 
+	//ApiKeys
+	app.Get("/apikeys", corsHandler(app.handleRequest(handler.GetApiKeys)))
+	app.Get("/apikeys/{apiKeyID}", corsHandler(app.handleRequest(handler.GetApiKey)))
+	app.Post("/apikeys/{apiKeyID}", corsHandler(app.handleRequest(handler.UpdateApiKey)))
+	app.Post("/apikeys", corsHandler(app.handleRequest(handler.CreateApiKey)))
+	app.Post("/apikeys/{apiKeyID}/delete", corsHandler(app.handleRequest(handler.DeleteApiKey)))
+
 	//Dummy Login
 	app.Post("/login", corsHandler(app.handleRequest(handler.DummyLogin)))
 

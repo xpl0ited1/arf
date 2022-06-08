@@ -36,10 +36,10 @@ func GetSubdomain(w http.ResponseWriter, r *http.Request) {
 	subdomainID := vars["subdomainID"]
 	result, err := dao.GetSubdomain(subdomainID)
 	if err != nil {
-		RespondError(w, http.StatusUnprocessableEntity, err.Error())
+		RespondError(w, http.StatusNotFound, err.Error())
 		return
 	}
-	RespondJSON(w, http.StatusCreated, result)
+	RespondJSON(w, http.StatusOK, result)
 }
 
 func GetSubdomains(w http.ResponseWriter, r *http.Request) {
@@ -51,10 +51,10 @@ func GetSubdomains(w http.ResponseWriter, r *http.Request) {
 
 	result, err := dao.GetSubdomains()
 	if err != nil {
-		RespondError(w, http.StatusUnprocessableEntity, err.Error())
+		RespondError(w, http.StatusNotFound, err.Error())
 		return
 	}
-	RespondJSON(w, http.StatusCreated, result)
+	RespondJSON(w, http.StatusOK, result)
 }
 
 func UpdateSubdomain(w http.ResponseWriter, r *http.Request) {
@@ -71,7 +71,7 @@ func UpdateSubdomain(w http.ResponseWriter, r *http.Request) {
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	RespondJSON(w, http.StatusCreated, result)
+	RespondJSON(w, http.StatusOK, result)
 }
 
 func DeleteSubdomain(w http.ResponseWriter, r *http.Request) {
@@ -89,7 +89,7 @@ func DeleteSubdomain(w http.ResponseWriter, r *http.Request) {
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	RespondJSON(w, http.StatusCreated, result)
+	RespondJSON(w, http.StatusOK, result)
 }
 
 func CreateSubdomainForDomain(w http.ResponseWriter, r *http.Request) {
@@ -159,10 +159,10 @@ func GetSubdomainForDomain(w http.ResponseWriter, r *http.Request) {
 	subdomainID := vars["subdomainID"]
 	result, err := dao.GetSubdomainForDomain(subdomainID, domainID)
 	if err != nil {
-		RespondError(w, http.StatusUnprocessableEntity, err.Error())
+		RespondError(w, http.StatusNotFound, err.Error())
 		return
 	}
-	RespondJSON(w, http.StatusCreated, result)
+	RespondJSON(w, http.StatusOK, result)
 }
 
 func GetSubdomainsForDomain(w http.ResponseWriter, r *http.Request) {
@@ -176,7 +176,7 @@ func GetSubdomainsForDomain(w http.ResponseWriter, r *http.Request) {
 	domainID := vars["domainID"]
 	result, err := dao.GetSubdomainsForDomain(domainID)
 	if err != nil {
-		RespondError(w, http.StatusUnprocessableEntity, err.Error())
+		RespondError(w, http.StatusNotFound, err.Error())
 		return
 	}
 	RespondJSON(w, http.StatusOK, result)
@@ -197,7 +197,7 @@ func UpdateSubdomainForDomain(w http.ResponseWriter, r *http.Request) {
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	RespondJSON(w, http.StatusCreated, result)
+	RespondJSON(w, http.StatusOK, result)
 }
 
 func DeleteSubdomainForDomain(w http.ResponseWriter, r *http.Request) {
@@ -215,5 +215,5 @@ func DeleteSubdomainForDomain(w http.ResponseWriter, r *http.Request) {
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	RespondJSON(w, http.StatusCreated, result)
+	RespondJSON(w, http.StatusOK, result)
 }

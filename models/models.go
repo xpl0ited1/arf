@@ -86,4 +86,5 @@ type User struct {
 type ApiKey struct {
 	mgm.DefaultModel `bson:",inline"`
 	ApiKey           string `json:"api_key"`
+	Enabled          bool   `json:"enabled"`
 }
