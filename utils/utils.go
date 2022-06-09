@@ -5,11 +5,12 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 	"log"
+	"math/rand"
 	"time"
 )
 
-const (
-	JWT_SECRET = "SECRET"
+var (
+	JwtSecret = GenerateRandomString(128)
 )
 
 func Contains(s []string, e string) bool {
@@ -19,6 +20,26 @@ func Contains(s []string, e string) bool {
 		}
 	}
 	return false
+}
+
+const charset = "abcdefghijklmnopqrstuvwxyz" +
+	"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+
+var seededRand *rand.Rand = rand.New(
+	rand.NewSource(time.Now().UnixNano()))
+
+func StringWithCharset(length int, charset string) string {
+	b := make([]byte, length)
+	for i := range b {
+		b[i] = charset[seededRand.Intn(len(charset))]
+	}
+	return string(b)
+}
+
+func GenerateRandomString(length int) string {
+	str := StringWithCharset(length, charset)
+	log.Println("JWT Secret: " + str)
+	return str
 }
 
 type JwtClaims struct {
@@ -40,7 +61,7 @@ func CreateTokenForUser(userId string, username string) (string, error) {
 	}
 
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	token, err := at.SignedString([]byte(JWT_SECRET))
+	token, err := at.SignedString([]byte(JwtSecret))
 	if err != nil {
 		return "", err
 	}
@@ -50,7 +71,7 @@ func CreateTokenForUser(userId string, username string) (string, error) {
 func GetUserIDFromToken(token string) (string, error) {
 	claims := &JwtClaims{}
 	tkn, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
-		return []byte(JWT_SECRET), nil
+		return []byte(JwtSecret), nil
 	})
 	if err != nil {
 		return "", err
@@ -72,7 +93,7 @@ func CheckIfAuthorized(tokenUserId string, resourceUserId string) bool {
 func GetUsernameFromToken(jwtToken string) string {
 	claims := &JwtClaims{}
 	if jwtToken != "" {
-		tkn, err := jwt.ParseWithClaims(jwtToken, claims, func(token *jwt.Token) (interface{}, error) { return []byte(JWT_SECRET), nil })
+		tkn, err := jwt.ParseWithClaims(jwtToken, claims, func(token *jwt.Token) (interface{}, error) { return []byte(JwtSecret), nil })
 		if err != nil {
 			log.Printf("%s\n",
 				err.Error(),
