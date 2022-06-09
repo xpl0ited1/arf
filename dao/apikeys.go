@@ -31,7 +31,7 @@ func GetApiKeyByID(id string) (models.ApiKey, error) {
 
 func GetApiKeyByKey(key string) (models.ApiKey, error) {
 	var result models.ApiKey
-	err := mgm.Coll(&models.ApiKey{}).SimpleFind(&result, bson.M{"apikey": key})
+	err := mgm.Coll(&models.ApiKey{}).First(bson.M{"apikey": key}, &result)
 	if err != nil {
 		//TODO
 		return result, err

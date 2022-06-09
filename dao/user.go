@@ -50,7 +50,7 @@ func GetUserByID(id string) (models.User, error) {
 
 func GetUserByUsername(username string) (models.User, error) {
 	var result models.User
-	err := mgm.Coll(&models.User{}).SimpleFind(&result, bson.M{"username": username})
+	err := mgm.Coll(&models.User{}).First(bson.M{"username": username}, &result)
 	if err != nil {
 		//TODO
 		return result, err

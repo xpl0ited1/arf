@@ -154,6 +154,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	dbUser, err := dao.GetUserByUsername(user.Username)
 	if err != nil {
+		log.Println("Error at fetching user from db")
+		log.Println(err)
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
@@ -170,6 +172,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	token, err := utils.CreateTokenForUser(user.ID.Hex(), user.Username)
 	if err != nil {
+		log.Println("Error at token generation")
+		log.Println(err)
 		RespondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
