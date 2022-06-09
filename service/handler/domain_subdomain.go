@@ -106,7 +106,7 @@ func CreateSubdomainForDomain(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		if res.ApiKey != "" {
+		if res.ApiKey == "" {
 			RespondError(w, http.StatusUnauthorized, "Unauthorized")
 			return
 		}

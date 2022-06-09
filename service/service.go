@@ -94,8 +94,16 @@ func (app *App) setRouters() {
 	app.Post("/apikeys", corsHandler(app.handleRequest(handler.CreateApiKey)))
 	app.Post("/apikeys/{apiKeyID}/delete", corsHandler(app.handleRequest(handler.DeleteApiKey)))
 
+	//Users
+	app.Get("/users", corsHandler(app.handleRequest(handler.GetUsers)))
+	app.Get("/users/{userID}", corsHandler(app.handleRequest(handler.GetUser)))
+	app.Post("/users/{userID}", corsHandler(app.handleRequest(handler.UpdateUser)))
+	app.Post("/users", corsHandler(app.handleRequest(handler.CreateUser)))
+	app.Post("/users/{userID}/delete", corsHandler(app.handleRequest(handler.DeleteUser)))
+	app.Post("/login", corsHandler(app.handleRequest(handler.Login)))
+
 	//Dummy Login
-	app.Post("/login", corsHandler(app.handleRequest(handler.DummyLogin)))
+	//app.Post("/login", corsHandler(app.handleRequest(handler.DummyLogin)))
 
 }
 

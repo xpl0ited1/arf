@@ -3,6 +3,7 @@ package utils
 import (
 	"activeReconBot/models"
 	"github.com/dgrijalva/jwt-go"
+	"golang.org/x/crypto/bcrypt"
 	"log"
 	"time"
 )
@@ -118,4 +119,14 @@ func ChunkSlice(slice []string, chunkSize int) [][]string {
 	}
 
 	return chunks
+}
+
+func HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
+
+func CheckPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }
