@@ -35,6 +35,8 @@ func (a *App) Initialize(config *config.Config) {
 	//
 	//a.DB = model.DBMigrate(db)
 	a.Router = mux.NewRouter()
+	a.Router.Use(loggingMiddleWare)
+	//Check this https://stackoverflow.com/questions/58084494/golang-how-can-i-get-authorization-from-mux
 	a.setRouters()
 }
 
@@ -51,6 +53,20 @@ func corsHandler(h http.Handler) http.HandlerFunc {
 			h.ServeHTTP(w, r)
 		}
 	}
+}
+
+func secureHandler(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+	})
+}
+
+func loggingMiddleWare(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("[LOG] %s %s %s %d %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"))
+
+		h.ServeHTTP(w, r)
+	})
 }
 
 // setRouters sets the all required routers

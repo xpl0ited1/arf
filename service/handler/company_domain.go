@@ -4,12 +4,14 @@ import (
 	"activeReconBot/dao"
 	"activeReconBot/utils"
 	"github.com/gorilla/mux"
+	"log"
 	"net/http"
 )
 
 func CreateDomainForCompany(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
@@ -18,6 +20,7 @@ func CreateDomainForCompany(w http.ResponseWriter, r *http.Request) {
 	companyID := vars["companyID"]
 	result, err := dao.CreateDomainForCompany(r, companyID)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
@@ -27,12 +30,14 @@ func CreateDomainForCompany(w http.ResponseWriter, r *http.Request) {
 func CreateDomain(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
 
 	result, err := dao.CreateDomain(r)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
@@ -42,6 +47,7 @@ func CreateDomain(w http.ResponseWriter, r *http.Request) {
 func GetDomainForCompany(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
@@ -51,6 +57,7 @@ func GetDomainForCompany(w http.ResponseWriter, r *http.Request) {
 	domainID := vars["domainID"]
 	result, err := dao.GetDomainForCompany(companyID, domainID)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusNotFound, err.Error())
 		return
 	}
@@ -60,14 +67,26 @@ func GetDomainForCompany(w http.ResponseWriter, r *http.Request) {
 func GetDomains(w http.ResponseWriter, r *http.Request) {
 	apiKey := r.Header.Get("X-Api-Key")
 	if apiKey != "" {
-		//TODO Implement API KEYS
-		if apiKey != "255a29906ead3a270fbb9da5b5fcdf58" {
+		res, err := dao.GetApiKeyByKey(apiKey)
+		if err != nil {
+			log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
+			RespondError(w, http.StatusUnauthorized, "Unauthorized")
+			return
+		}
+
+		if !res.Enabled {
+			RespondError(w, http.StatusUnauthorized, "Unauthorized")
+			return
+		}
+
+		if res.ApiKey == "" {
 			RespondError(w, http.StatusUnauthorized, "Unauthorized")
 			return
 		}
 	} else {
 		_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 		if err != nil {
+			log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 			RespondError(w, http.StatusUnauthorized, "Unauthorized")
 			return
 		}
@@ -92,6 +111,7 @@ func GetDomain(w http.ResponseWriter, r *http.Request) {
 	domainID := vars["domainID"]
 	result, err := dao.GetDomain(domainID)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusNotFound, err.Error())
 		return
 	}
@@ -101,6 +121,7 @@ func GetDomain(w http.ResponseWriter, r *http.Request) {
 func GetDomainsForCompany(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
@@ -118,6 +139,7 @@ func GetDomainsForCompany(w http.ResponseWriter, r *http.Request) {
 func UpdateDomainForCompany(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
@@ -127,6 +149,7 @@ func UpdateDomainForCompany(w http.ResponseWriter, r *http.Request) {
 	domainID := vars["domainID"]
 	result, err := dao.UpdateDomainForCompany(domainID, companyID, r)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
@@ -136,6 +159,7 @@ func UpdateDomainForCompany(w http.ResponseWriter, r *http.Request) {
 func UpdateDomain(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
@@ -144,6 +168,7 @@ func UpdateDomain(w http.ResponseWriter, r *http.Request) {
 	domainID := vars["domainID"]
 	result, err := dao.UpdateDomain(domainID, r)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
@@ -153,6 +178,7 @@ func UpdateDomain(w http.ResponseWriter, r *http.Request) {
 func DeleteDomain(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
@@ -162,6 +188,7 @@ func DeleteDomain(w http.ResponseWriter, r *http.Request) {
 
 	result, err := dao.DeleteDomain(domainID)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
@@ -171,6 +198,7 @@ func DeleteDomain(w http.ResponseWriter, r *http.Request) {
 func DeleteDomainForCompany(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
@@ -181,6 +209,7 @@ func DeleteDomainForCompany(w http.ResponseWriter, r *http.Request) {
 
 	result, err := dao.DeleteDomainForCompany(domainID, companyID)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}

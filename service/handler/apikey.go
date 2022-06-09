@@ -4,18 +4,21 @@ import (
 	"activeReconBot/dao"
 	"activeReconBot/utils"
 	"github.com/gorilla/mux"
+	"log"
 	"net/http"
 )
 
 func CreateApiKey(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
 
 	result, err := dao.CreateApiKey(r)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
@@ -25,6 +28,7 @@ func CreateApiKey(w http.ResponseWriter, r *http.Request) {
 func GetApiKey(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
@@ -33,6 +37,7 @@ func GetApiKey(w http.ResponseWriter, r *http.Request) {
 	apiKeyID := vars["apiKeyID"]
 	result, err := dao.GetApiKeyByID(apiKeyID)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
@@ -42,12 +47,14 @@ func GetApiKey(w http.ResponseWriter, r *http.Request) {
 func GetApiKeys(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
 
 	result, err := dao.GetApiKeys()
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -57,6 +64,7 @@ func GetApiKeys(w http.ResponseWriter, r *http.Request) {
 func UpdateApiKey(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
@@ -66,12 +74,14 @@ func UpdateApiKey(w http.ResponseWriter, r *http.Request) {
 
 	res, err := dao.GetApiKeyByID(apiKeyID)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusNotFound, err.Error())
 		return
 	}
 
 	result, err := dao.UpdateApiKey(r, res)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
@@ -81,6 +91,7 @@ func UpdateApiKey(w http.ResponseWriter, r *http.Request) {
 func DeleteApiKey(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
@@ -90,12 +101,14 @@ func DeleteApiKey(w http.ResponseWriter, r *http.Request) {
 
 	res, err := dao.GetApiKeyByID(apiKeyID)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusNotFound, err.Error())
 		return
 	}
 
 	result, err := dao.DeleteApiKey(res)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}

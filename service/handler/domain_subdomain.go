@@ -13,12 +13,14 @@ import (
 func CreateSubdomain(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
 
 	result, err := dao.CreateSubdomain(r)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
@@ -28,6 +30,7 @@ func CreateSubdomain(w http.ResponseWriter, r *http.Request) {
 func GetSubdomain(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
@@ -36,6 +39,7 @@ func GetSubdomain(w http.ResponseWriter, r *http.Request) {
 	subdomainID := vars["subdomainID"]
 	result, err := dao.GetSubdomain(subdomainID)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusNotFound, err.Error())
 		return
 	}
@@ -45,12 +49,14 @@ func GetSubdomain(w http.ResponseWriter, r *http.Request) {
 func GetSubdomains(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
 
 	result, err := dao.GetSubdomains()
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusNotFound, err.Error())
 		return
 	}
@@ -60,6 +66,7 @@ func GetSubdomains(w http.ResponseWriter, r *http.Request) {
 func UpdateSubdomain(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
@@ -68,6 +75,7 @@ func UpdateSubdomain(w http.ResponseWriter, r *http.Request) {
 	subdomainID := vars["subdomainID"]
 	result, err := dao.UpdateSubdomain(subdomainID, r)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
@@ -77,6 +85,7 @@ func UpdateSubdomain(w http.ResponseWriter, r *http.Request) {
 func DeleteSubdomain(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
@@ -86,6 +95,7 @@ func DeleteSubdomain(w http.ResponseWriter, r *http.Request) {
 
 	result, err := dao.DeleteSubdomain(subdomainID)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
@@ -97,6 +107,7 @@ func CreateSubdomainForDomain(w http.ResponseWriter, r *http.Request) {
 	if apiKey != "" {
 		res, err := dao.GetApiKeyByKey(apiKey)
 		if err != nil {
+			log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 			RespondError(w, http.StatusUnauthorized, "Unauthorized")
 			return
 		}
@@ -113,6 +124,7 @@ func CreateSubdomainForDomain(w http.ResponseWriter, r *http.Request) {
 	} else {
 		_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 		if err != nil {
+			log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 			RespondError(w, http.StatusUnauthorized, "Unauthorized")
 			return
 		}
@@ -124,6 +136,7 @@ func CreateSubdomainForDomain(w http.ResponseWriter, r *http.Request) {
 	domainID := vars["domainID"]
 	result, err := dao.CreateSubdomainForDomain(r, domainID)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
@@ -139,14 +152,14 @@ func CreateSubdomainForDomain(w http.ResponseWriter, r *http.Request) {
 
 		pageTitle, err := scanners.GetPageTitle(result.SubdomainName)
 		if err != nil {
-			log.Println(err)
+			log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		}
 
 		if pageTitle != "" {
 			result.HTTPTitle = pageTitle
 			result, err = dao.UpdateSubdomainHTTPTitle(result)
 			if err != nil {
-				log.Println(err)
+				log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 			}
 		}
 
@@ -160,6 +173,7 @@ func CreateSubdomainForDomain(w http.ResponseWriter, r *http.Request) {
 func GetSubdomainForDomain(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
@@ -169,6 +183,7 @@ func GetSubdomainForDomain(w http.ResponseWriter, r *http.Request) {
 	subdomainID := vars["subdomainID"]
 	result, err := dao.GetSubdomainForDomain(subdomainID, domainID)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusNotFound, err.Error())
 		return
 	}
@@ -178,6 +193,7 @@ func GetSubdomainForDomain(w http.ResponseWriter, r *http.Request) {
 func GetSubdomainsForDomain(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
@@ -186,6 +202,7 @@ func GetSubdomainsForDomain(w http.ResponseWriter, r *http.Request) {
 	domainID := vars["domainID"]
 	result, err := dao.GetSubdomainsForDomain(domainID)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusNotFound, err.Error())
 		return
 	}
@@ -195,6 +212,7 @@ func GetSubdomainsForDomain(w http.ResponseWriter, r *http.Request) {
 func UpdateSubdomainForDomain(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
@@ -204,6 +222,7 @@ func UpdateSubdomainForDomain(w http.ResponseWriter, r *http.Request) {
 	domainID := vars["domainID"]
 	result, err := dao.UpdateSubdomainForDomain(subdomainID, domainID, r)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
@@ -213,6 +232,7 @@ func UpdateSubdomainForDomain(w http.ResponseWriter, r *http.Request) {
 func DeleteSubdomainForDomain(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
@@ -222,6 +242,7 @@ func DeleteSubdomainForDomain(w http.ResponseWriter, r *http.Request) {
 	domainID := vars["domainID"]
 	result, err := dao.DeleteSubdomainForDomain(domainID, subdomainID)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}

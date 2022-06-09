@@ -15,6 +15,7 @@ func DummyLogin(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&user)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -22,6 +23,7 @@ func DummyLogin(w http.ResponseWriter, r *http.Request) {
 	if user.Username == "ACAB" && user.Password == "" {
 		token, err := utils.CreateTokenForUser(user.Username, user.Username)
 		if err != nil {
+			log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 			RespondError(w, http.StatusInternalServerError, err.Error())
 			return
 		}
@@ -37,12 +39,14 @@ func DummyLogin(w http.ResponseWriter, r *http.Request) {
 func CreateUser(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
 
 	result, err := dao.CreateUser(r)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
@@ -52,6 +56,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
@@ -61,12 +66,14 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 
 	res, err := dao.GetUserByID(userID)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusNotFound, err.Error())
 		return
 	}
 
 	result, err := dao.DeleteUser(res)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
@@ -76,6 +83,7 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
@@ -85,12 +93,14 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 	res, err := dao.GetUserByID(userID)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusNotFound, err.Error())
 		return
 	}
 
 	result, err := dao.UpdateUser(r, res)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
@@ -100,6 +110,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 func GetUser(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
@@ -108,6 +119,7 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 	userID := vars["userID"]
 	result, err := dao.GetUserByID(userID)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
@@ -117,12 +129,14 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 func GetUsers(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
 
 	result, err := dao.GetUsers()
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -134,6 +148,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	users, err := dao.GetUsers()
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		log.Println(err)
 	}
 
@@ -148,14 +163,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	err = decoder.Decode(&user)
 	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	dbUser, err := dao.GetUserByUsername(user.Username)
 	if err != nil {
-		log.Println("Error at fetching user from db")
-		log.Println(err)
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
@@ -172,8 +187,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	token, err := utils.CreateTokenForUser(user.ID.Hex(), user.Username)
 	if err != nil {
-		log.Println("Error at token generation")
-		log.Println(err)
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
 		RespondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
