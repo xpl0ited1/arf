@@ -416,3 +416,45 @@ func DeleteSubdomain(subdomainID string) (map[string]bool, error) {
 	resp["success"] = true
 	return resp, nil
 }
+
+func ImportSubdomainsForDomain(r *http.Request) ([]models.Subdomain, error) {
+	decoder := json.NewDecoder(r.Body)
+	var subdomains []models.Subdomain
+	var domain models.Domain
+	var tmpDomain models.Domain
+
+	err := decoder.Decode(&tmpDomain)
+	if err != nil {
+		//TODO
+		return subdomains, err
+	}
+
+	domain, err = GetDomain(tmpDomain.ID.Hex())
+	if err != nil {
+		//TODO
+		return subdomains, err
+	}
+
+	for _, subdomain := range tmpDomain.Subdomains {
+		subdomain.DomainID = domain.ID.Hex()
+		err = mgm.Coll(&subdomain).Create(&subdomain)
+		if err != nil {
+			//TODO
+			return subdomains, err
+		}
+
+		subdomains = append(subdomains, subdomain)
+
+		//Add subdomain to the domain  array
+		domain.Subdomains = append(domain.Subdomains, subdomain)
+		err = mgm.Coll(&models.Domain{}).Update(&domain)
+		if err != nil {
+			//TODO
+			return subdomains, err
+		}
+	}
+
+	//TODO: Add domains to the company array
+
+	return subdomains, nil
+}

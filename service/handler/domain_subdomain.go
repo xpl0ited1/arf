@@ -248,3 +248,74 @@ func DeleteSubdomainForDomain(w http.ResponseWriter, r *http.Request) {
 	}
 	RespondJSON(w, http.StatusOK, result)
 }
+
+func ImportSubdomainForDomain(w http.ResponseWriter, r *http.Request) {
+	apiKey := r.Header.Get("X-Api-Key")
+	if apiKey != "" {
+		res, err := dao.GetApiKeyByKey(apiKey)
+		if err != nil {
+			log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
+			RespondError(w, http.StatusUnauthorized, "Unauthorized")
+			return
+		}
+
+		if !res.Enabled {
+			RespondError(w, http.StatusUnauthorized, "Unauthorized")
+			return
+		}
+
+		if res.ApiKey == "" {
+			RespondError(w, http.StatusUnauthorized, "Unauthorized")
+			return
+		}
+	} else {
+		_, err := utils.GetUserIDFromToken(r.Header.Get("Authorization"))
+		if err != nil {
+			log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
+			RespondError(w, http.StatusUnauthorized, "Unauthorized")
+			return
+		}
+	}
+
+	var wg sync.WaitGroup
+
+	result, err := dao.ImportSubdomainsForDomain(r)
+	if err != nil {
+		log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
+		RespondError(w, http.StatusUnprocessableEntity, err.Error())
+		return
+	}
+
+	for _, subdomain := range result {
+		wg.Add(1)
+		go func(wg *sync.WaitGroup) {
+			defer wg.Done()
+			ips := scanners.ResolveIpFromHostnameShodan(subdomain.SubdomainName)
+			for _, ip := range ips {
+				shodanData := scanners.GetShodanDetailsFromIPAddress(ip.IP)
+				_, err := dao.UpdateSubdomainNoReq(subdomain.ID.Hex(), shodanData)
+				if err != nil {
+					log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
+				}
+			}
+
+			pageTitle, err := scanners.GetPageTitle(subdomain.SubdomainName)
+			if err != nil {
+				log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
+			}
+
+			if pageTitle != "" {
+				subdomain.HTTPTitle = pageTitle
+				subdomain, err = dao.UpdateSubdomainHTTPTitle(subdomain)
+				if err != nil {
+					log.Printf("[ERROR] %s %s %s %d %s %s", r.RemoteAddr, r.RequestURI, r.Method, r.ContentLength, r.Header.Get("User-Agent"), err.Error())
+				}
+			}
+
+		}(&wg)
+	}
+
+	RespondJSON(w, http.StatusCreated, result)
+
+	wg.Wait()
+}

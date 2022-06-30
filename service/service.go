@@ -102,6 +102,7 @@ func (app *App) setRouters() {
 	app.Post("/subdomains", corsHandler(app.handleRequest(handler.CreateSubdomain)))
 	app.Post("/subdomains/{subdomainID}", corsHandler(app.handleRequest(handler.UpdateSubdomain)))
 	app.Post("/subdomains/{subdomainID}/delete", corsHandler(app.handleRequest(handler.DeleteSubdomain)))
+	app.Post("/importSubdomains", corsHandler(app.handleRequest(handler.ImportSubdomainForDomain)))
 
 	//ApiKeys
 	app.Get("/apikeys", corsHandler(app.handleRequest(handler.GetApiKeys)))
