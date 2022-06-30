@@ -12,6 +12,6 @@ Asset management and simple active recon for bounty hunters, security teams, etc
 
 # TODO
 
-* Test integration with submonitor for autofilling company subdomains discovering and autoscanning
+* ~~Test integration with submonitor for autofilling company subdomains discovering and autoscanning~~
 
 ---
